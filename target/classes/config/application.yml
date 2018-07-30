@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /phone-api
+    session:
+      cookie:
+        path: /phone-api
+spring:
+  profiles:
+    active: test
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test

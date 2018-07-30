@@ -1,0 +1,47 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: phone-api
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        app: gph
+        tier: backend
+    spec:
+      imagePullSecrets:
+      - name: awsregistry
+      containers:
+      - name: phone-api
+        image: 313316477550.dkr.ecr.eu-west-1.amazonaws.com/phone-api:latest    #--->phone-api:version imagen especificada en linea de comando de jenkins
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+#        readinessProbe: --> sonda que se ejectua cuando se crea la imagen y que verifica que la aplicación está levantada
+#          httpGet:
+#            path: /gph/api/actuator/info
+#            port: 8080
+#          initialDelaySeconds: 20
+#          periodSeconds: 30
+#        livenessProbe: --> sonda para comprobar que la ejecución sigue viva. Si da KO, reinicia el pod
+#          httpGet:
+#            path: /gph/api/actuator/health
+#            port: 8080
+#          initialDelaySeconds: 30
+#          periodSeconds: 30
+        env:
+        - name: "JAVA_OPTS"
+          value: "-Xms256m -Xmx768m"
+        - name: "ENVIRONMENT"
+          valueFrom:
+            configMapKeyRef:
+              name: global-configmap
+              key: ENVIRONMENT
+ #       - name: "CONFIG_SERVER_URL"
+ #         valueFrom:
+ #           configMapKeyRef:
+ #             name: global-configmap
+ #             key: CONFIG_SERVER_URL

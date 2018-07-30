@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: phone-api
+  cloud:
+    config:
+     # uri: ${CONFIG_SERVER_URL}
+     enabled: false 
