@@ -1,6 +1,6 @@
 spring:
   application:
-    name: phone-api
+    name: parameter-api
   cloud:
     config:
      # uri: ${CONFIG_SERVER_URL}
