@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.profile</groupId>
-	<artifactId>parameter-api</artifactId>
+	<artifactId>budget-api</artifactId>
 	<version>0.0.1-SANPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>parameter-api</name>
+	<name>budget-api</name>
 	<description>Arquetipo base para APIs rest</description>
 
 	<parent>

@@ -1,6 +1,7 @@
-package es.profile.parameter;
+package es.profile.budget;
 
 import static org.mockito.BDDMockito.given;
+
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,8 +29,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.profile.parameter.domain.Parameter;
-import es.profile.parameter.service.ParameterService;
+import es.profile.budget.domain.Budget;
+import es.profile.budget.service.BudgetService;
+import es.profile.budget.web.controller.BudgetController;
 
 /**
  * The Class ApplicationWebIntegrationTests.
@@ -41,13 +44,14 @@ public class ApplicationWebIntegrationTests {
 	/** The mvc. */
 	@Autowired
 	private MockMvc mvc;
-
-	/** The parameter service. */
+	@InjectMocks
+	private BudgetController controller;
+	/** The budget service. */
 	@MockBean
-	private ParameterService paramService;
+	private BudgetService paramService;
 
 	/**
-	 * List all parameters.
+	 * List all budgets.
 	 *
 	 * @throws Exception
 	 *             the exception
@@ -56,13 +60,13 @@ public class ApplicationWebIntegrationTests {
 	public void listAllParameters() throws Exception {
 		given(paramService.getAll()).willReturn(populateDummyParameters());
 
-		this.mvc.perform(get("/parameters").headers(generateHeaders("GET"))).andExpect(status().isOk());
+		this.mvc.perform(get("/budgets").headers(generateHeaders("GET"))).andExpect(status().isOk());
 	}
 
 	/**
-	 * Gets the parameter.
+	 * Gets the budget.
 	 *
-	 * @return the parameter
+	 * @return the budget
 	 * @throws Exception
 	 *             the exception
 	 */
@@ -70,16 +74,16 @@ public class ApplicationWebIntegrationTests {
 	public void getParameter() throws Exception {
 		given(paramService.get(Mockito.anyString())).willReturn(createParamMock());
 
-		this.mvc.perform(get("/parameters/{id}", 1).headers(generateHeaders("GET"))).andExpect(status().isOk())
+		this.mvc.perform(get("/budgets/{id}", 1).headers(generateHeaders("GET"))).andExpect(status().isOk())
 				.andExpect(content().json(new ObjectMapper().writeValueAsString(createParamMock())));
 	}
 
 	
 	@Test
 	public void findParameter() throws Exception {
-		given(paramService.findByValue(Mockito.anyLong())).willReturn(populateDummyParameters());
+		given(paramService.findByName(Mockito.anyString())).willReturn(populateDummyParameters());
 		
-		this.mvc.perform(get("/parameters/value")
+		this.mvc.perform(get("/budget/name")
 				.param("value","32")
 				.headers(generateHeaders("GET"))).
 		andExpect(status().isOk());
@@ -87,43 +91,45 @@ public class ApplicationWebIntegrationTests {
 	}
 	
 	/**
-	 * Creates the parameter.
+	 * Creates the budget.
 	 *
 	 * @throws Exception
 	 *             the exception
 	 */
 	@Test
 	public void createParameter() throws Exception {
-		given(paramService.isParamExist(Mockito.anyString())).willReturn(Boolean.FALSE);
+		paramService.create(createParamMock());
 
-		this.mvc.perform(post("/parameters").contentType(MediaType.APPLICATION_JSON)
+		this.mvc.perform(post("/budgets").contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(createParamMock())).headers(generateHeaders("POST")))
 				.andExpect(status().isCreated());
 	}
+	
 
 	/**
-	 * Update parameter.
+	 * Update budget.
 	 *
 	 * @throws Exception
 	 *             the exception
 	 */
 	@Test
 	public void updateParameter() throws Exception {
-		Parameter mockParam = createParamMock();
-		given(paramService.get(Mockito.anyString())).willReturn(createParamMock());
+		Budget oldParam = createParamMock();
+		Budget newParam = createParamMock();
+		newParam.setId("12345");
+		newParam.setPrize("newApplication");
+		
+		given(paramService.get(Mockito.anyString())).willReturn(oldParam);
+		paramService.update(newParam,oldParam.getId());
+		
 
-		mockParam.setId(mockParam.getId());
-		mockParam.setValue(50);
-		mockParam.setApplication("New Name");
-		mockParam.setInitial("50000");
-
-		this.mvc.perform(put("/parameters").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(mockParam)).headers(generateHeaders("PUT")))
+		this.mvc.perform(put("/budgets/"+oldParam.getId()).contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(newParam)).headers(generateHeaders("PUT")))
 				.andExpect(status().isNoContent());
 	}
 
 	/**
-	 * Delete parameter.
+	 * Delete budget.
 	 *
 	 * @throws Exception
 	 *             the exception
@@ -132,34 +138,32 @@ public class ApplicationWebIntegrationTests {
 	public void deleteParameter() throws Exception {
 		given(paramService.get(Mockito.anyString())).willReturn(createParamMock());
 
-		this.mvc.perform(delete("/parameters/{id}", 1).headers(generateHeaders("DELETE")))
+		this.mvc.perform(delete("/budgets/{id}", 1).headers(generateHeaders("DELETE")))
 				.andExpect(status().isNoContent());
 	}
 
 	/**
-	 * Delete all parameters.
+	 * Delete all budgets.
 	 *
 	 * @throws Exception
 	 *             the exception
 	 */
 	@Test
 	public void deleteAllParameters() throws Exception {
-		given(paramService.get(Mockito.anyString())).willReturn(createParamMock());
-
-		this.mvc.perform(delete("/parameters").headers(generateHeaders("DELETE"))).andExpect(status().isNoContent());
+		this.mvc.perform(delete("/budgets").headers(generateHeaders("DELETE"))).andExpect(status().isNoContent());
 	}
 
 	/**
-	 * Creates the parameter mock.
+	 * Creates the budget mock.
 	 *
-	 * @return the parameter
+	 * @return the budget
 	 */
-	private Parameter createParamMock() {
-		Parameter u = new Parameter();
-		u.setValue(25);
+	private Budget createParamMock() {
+		Budget u = new Budget();
+		u.setObjective(25);
 		u.setId("123456789123456");
-		u.setInitial("Name");
-		u.setApplication("25000");
+		u.setName("Name");
+		u.setPrize("25000");
 		return u;
 	}
 
@@ -177,12 +181,12 @@ public class ApplicationWebIntegrationTests {
 		return headers;
 	}
 
-	private static List<Parameter> populateDummyParameters() {
-		List<Parameter> params = new ArrayList<Parameter>();
-		params.add(new Parameter());
-		params.add(new Parameter());
-		params.add(new Parameter());
-		params.add(new Parameter());
+	private static List<Budget> populateDummyParameters() {
+		List<Budget> params = new ArrayList<Budget>();
+		params.add(new Budget());
+		params.add(new Budget());
+		params.add(new Budget());
+		params.add(new Budget());
 		return params;
 	}
 }

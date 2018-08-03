@@ -1,28 +1,28 @@
-package es.profile.parameter;
+package es.profile.budget;
 
 import java.net.URI;
+
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.web.client.RestTemplate;
 
-import es.profile.parameter.domain.Parameter;
-import es.profile.parameter.domain.User;
+import es.profile.budget.domain.Budget;
 
 public class SpringBootRestTestClient {
 
 	public static final String REST_SERVICE_URI = "http://localhost:8080/SpringBootRestApi/api";
 
 	/* GET */
-	private static void listAllParameters() {
+	private static void listAllBudgets() {
 		System.out.println("Testing listAllParameters API-----------");
 
 		RestTemplate restTemplate = new RestTemplate();
-		Parameter[] parametersArray = restTemplate.getForObject(REST_SERVICE_URI + "/parameter/", Parameter[].class);
-		Collection<Parameter> parameterList = Arrays.asList(parametersArray);
+		Budget[] parametersArray = restTemplate.getForObject(REST_SERVICE_URI + "/parameter/", Budget[].class);
+		Collection<Budget> parameterList = Arrays.asList(parametersArray);
 
 		if (parameterList != null) {
-			for (Parameter u : parameterList) {
+			for (Budget u : parameterList) {
 				System.out.println("Parameter : " + u);
 			}
 		} else {
@@ -34,7 +34,7 @@ public class SpringBootRestTestClient {
 	private static void getParameter() {
 		System.out.println("Testing getParameter API----------");
 		RestTemplate restTemplate = new RestTemplate();
-		Parameter parameter = restTemplate.getForObject(REST_SERVICE_URI + "/parameter/1", Parameter.class);
+		Budget parameter = restTemplate.getForObject(REST_SERVICE_URI + "/parameter/1", Budget.class);
 		System.out.println(parameter);
 	}
 
@@ -42,8 +42,8 @@ public class SpringBootRestTestClient {
 	private static void createParameter() {
 		System.out.println("Testing create Parameter API----------");
 		RestTemplate restTemplate = new RestTemplate();
-		Parameter param = new Parameter();
-		URI uri = restTemplate.postForLocation(REST_SERVICE_URI + "/parameter/", param, Parameter.class);
+		Budget param = new Budget();
+		URI uri = restTemplate.postForLocation(REST_SERVICE_URI + "/parameter/", param, Budget.class);
 		System.out.println("Location : " + uri.toASCIIString());
 	}
 
@@ -51,7 +51,7 @@ public class SpringBootRestTestClient {
 	private static void updateParameter() {
 		System.out.println("Testing update Parameter API----------");
 		RestTemplate restTemplate = new RestTemplate();
-		Parameter param = new Parameter();
+		Budget param = new Budget();
 		restTemplate.put(REST_SERVICE_URI + "/parameter/1", param);
 		System.out.println(param);
 	}
@@ -71,15 +71,15 @@ public class SpringBootRestTestClient {
 	}
 
 	public static void main(String args[]) {
-		listAllParameters();
+		listAllBudgets();
 		getParameter();
 		createParameter();
-		listAllParameters();
+		listAllBudgets();
 		updateParameter();
-		listAllParameters();
+		listAllBudgets();
 		deleteParameter();
-		listAllParameters();
+		listAllBudgets();
 		deleteAllParameters();
-		listAllParameters();
+		listAllBudgets();
 	}
 }

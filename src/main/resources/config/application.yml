@@ -1,10 +1,10 @@
 server:
   port: 8080
   servlet:
-    context-path: /parameter-api
+    context-path: /budgets-api
     session:
       cookie:
-        path: /parameter-api
+        path: /budgets-api
 spring:
   profiles:
     active: test
@@ -12,4 +12,4 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: test
+      database: budgets

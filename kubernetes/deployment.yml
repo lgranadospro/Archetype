@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: parameter-api
+  name: budget-api
 spec:
   replicas: 2
   revisionHistoryLimit: 5
@@ -15,8 +15,8 @@ spec:
       imagePullSecrets:
       - name: awsregistry
       containers:
-      - name: parameter-api
-        image: 313316477550.dkr.ecr.eu-west-1.amazonaws.com/parameter-api:latest    #--->parameter-api:version imagen especificada en linea de comando de jenkins
+      - name: budget-api
+        image: 313316477550.dkr.ecr.eu-west-1.amazonaws.com/budget-api:latest    #--->budget-api:version imagen especificada en linea de comando de jenkins
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
