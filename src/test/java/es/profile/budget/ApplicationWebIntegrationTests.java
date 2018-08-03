@@ -84,7 +84,7 @@ public class ApplicationWebIntegrationTests {
 		given(paramService.findByName(Mockito.anyString())).willReturn(populateDummyParameters());
 		
 		this.mvc.perform(get("/budget/name")
-				.param("value","32")
+				.param("name","32")
 				.headers(generateHeaders("GET"))).
 		andExpect(status().isOk());
 		

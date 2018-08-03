@@ -17,3 +17,5 @@
 [ERROR] 2018-08-03 08:16:30.537 [main] BudgetValidator - Unable to update. Parameter with id prueba not found.
 [ERROR] 2018-08-03 08:17:18.657 [main] BudgetValidator - Unable to delete. Parameter with id 1234 not found.
 [ERROR] 2018-08-03 08:17:18.673 [main] BudgetValidator - Unable to update. Parameter with id prueba not found.
+[ERROR] 2018-08-03 08:52:05.614 [main] BudgetValidator - Unable to delete. Budget with id 1234 not found.
+[ERROR] 2018-08-03 08:52:05.625 [main] BudgetValidator - Unable to update. Budget with id prueba not found.

@@ -10,7 +10,7 @@
 	<packaging>jar</packaging>
 
 	<name>budget-api</name>
-	<description>Arquetipo base para APIs rest</description>
+	<description>Budget API para gamification</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -164,7 +164,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>parameter-api</finalName>
+		<finalName>budget-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
